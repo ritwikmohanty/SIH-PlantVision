@@ -5,6 +5,7 @@ import Header from './Header';
 const Library = () => {
   const [bookmarkedPlants, setBookmarkedPlants] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [hoveredPlant, setHoveredPlant] = useState(null);
 
   const plantData = [
     { name: 'Tulsi', system: 'Ayurveda', description: 'Tulsi is revered in Ayurveda for its ability to promote balance in the body, often used for respiratory conditions and immunity boosting.', route: '/library/tulsi', image: 'tulsi.jpg' },
@@ -84,8 +85,14 @@ const Library = () => {
       padding: '20px',
       boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
       position: 'relative',
-      transition: 'transform 0.3s ease',
+      transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+      cursor: 'pointer',
     },
+    plantCardHovered: {
+      transform: 'scale(1.05)',
+      boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.15)',
+    },
+    
     plantImage: {
       backgroundColor: '#e0e0e0',
       width: '100%',
@@ -170,7 +177,13 @@ const Library = () => {
         {/* Plant Grid */}
         <div style={styles.plantGrid}>
           {filteredPlants.map((plant) => (
-            <div key={plant.name} style={styles.plantCard}>
+            <div key={plant.name}
+            style={{
+              ...styles.plantCard,
+              ...(hoveredPlant === plant.name ? styles.plantCardHovered : {}),
+            }}
+            onMouseEnter={() => setHoveredPlant(plant.name)}
+            onMouseLeave={() => setHoveredPlant(null)}>
               <Link to={plant.route} style={styles.link}>
                 <div
                   style={{
@@ -205,5 +218,4 @@ const Library = () => {
     </div>
   );
 };
-
 export default Library;
