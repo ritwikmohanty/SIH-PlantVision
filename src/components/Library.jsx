@@ -122,7 +122,7 @@ const Library = () => {
       position: 'absolute',
       right: '10px',
       bottom: '10px',
-      fontSize: '28px',
+      fontSize: '45px',
       cursor: 'pointer',
       color: '#888',
     },
