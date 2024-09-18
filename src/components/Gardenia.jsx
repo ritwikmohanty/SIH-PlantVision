@@ -18,7 +18,7 @@ const buttonStyle = {
   left: '20px',
   padding: '10px 20px',
   fontSize: '16px',
-  backgroundColor: '#437532',
+  backgroundColor: '#333',
   color: '#fff',
   border: 'none',
   borderRadius: '5px',
