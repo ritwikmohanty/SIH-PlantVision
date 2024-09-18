@@ -191,12 +191,12 @@ const QuizApp = () => {
       backgroundColor: '#f0f7f1',
       padding: '20px',
       position: 'relative', // Added for relative positioning of points
-      marginTop: '20px', 
+      marginTop: '80px', 
     },
     header: {
       fontSize: '36px', // Larger title
       textAlign: 'center',
-      marginTop:'60px'
+      marginBottom: '30px',
     },
     points: {
       position: 'absolute', // Absolute positioning for right alignment
@@ -215,7 +215,7 @@ const QuizApp = () => {
       textAlign: 'center',
       fontSize: '20px',
       color: '#2196F3',
-      marginBottom: '10px',
+      marginBottom: '20px',
     },
   };
 
