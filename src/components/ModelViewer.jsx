@@ -15,7 +15,7 @@ const styles = {
     height: '100vh',
     overflow: 'hidden',
     marginTop: '80px',
-    fontFamily: "'Poppins', sans-serif", // Adding Google Font here
+    fontFamily: "'Poppins', sans-serif",
   },
   contentContainer: {
     display: 'flex',
@@ -70,19 +70,18 @@ const styles = {
   },
   heading1: {
     fontSize: '2.5rem',
-    color: '#333',
+    color: '#2C3E50',
     fontWeight: '600',
-    color: '#2C3E50', // Darker blue for the main heading
   },
   heading3: {
     fontSize: '1.7rem',
     fontWeight: '500',
-    color: '#16A085', // Teal for scientific name
+    color: '#16A085',
   },
   heading4: {
     fontSize: '1.4rem',
     fontWeight: '500',
-    color: '#000', // Changed from red to black for subheadings
+    color: '#000',
     marginBottom: '5px',
   },
   paragraph: {
@@ -105,7 +104,7 @@ const styles = {
     cursor: 'pointer',
     backgroundColor: '#4CAF50',
     color: '#fff',
-    transition: 'background-color 0.3s ease, transform 0.3s ease', // Add transition for smooth animation
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
   },
   stopReadingButton: {
     marginTop: '15px',
@@ -114,7 +113,7 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
-    backgroundColor: '#000', // Changed from red to black for stop reading button
+    backgroundColor: '#000',
     color: '#fff',
     transition: 'background-color 0.3s ease, transform 0.3s ease',
   },
@@ -162,13 +161,12 @@ const styles = {
   },
 };
 
-// Add hover and active animations for the button
 const buttonStyles = {
   ':hover': {
-    transform: 'scale(1.05)', // Scale up on hover
+    transform: 'scale(1.05)',
   },
   ':active': {
-    backgroundColor: '#388E3C', // Darken the background color on click
+    backgroundColor: '#388E3C',
   },
 };
 
@@ -186,8 +184,8 @@ const FBXModel = ({ modelPath, scale, position, onModelClick }) => {
       object.traverse((child) => {
         if (child.isMesh) {
           child.material.side = DoubleSide;
-          child.castShadow = true; // Cast shadows
-          child.receiveShadow = true; // Receive shadows
+          child.castShadow = true;
+          child.receiveShadow = true;
           child.alphaTest = 0.5;
         }
       });
@@ -216,10 +214,36 @@ const CustomCamera = () => {
   return null;
 };
 
-const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position, planePosition, imageData, plantData }) => {
+const ModelViewer = ({ modelPath, scale, position, planePosition, imageData, plantData }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isReading, setIsReading] = useState(false);
+  const [voices, setVoices] = useState([]);
+  const [selectedVoice, setSelectedVoice] = useState(null);
   const utteranceRef = useRef(null);
+
+  // Fetch available voices
+  useEffect(() => {
+    const updateVoices = () => {
+      const availableVoices = speechSynthesis.getVoices();
+      setVoices(availableVoices);
+
+      // Find the "en-IN-Standard-B" voice
+      const indianVoice = availableVoices.find(voice => voice.name === 'en-IN-Standard-B');
+      if (indianVoice) {
+        setSelectedVoice(indianVoice);
+      } else if (availableVoices.length > 0) {
+        // Default to the first available voice if "en-IN-Standard-B" is not found
+        setSelectedVoice(availableVoices[0]);
+      }
+    };
+
+    updateVoices();
+    speechSynthesis.onvoiceschanged = updateVoices; // Update voices when they change
+
+    return () => {
+      speechSynthesis.onvoiceschanged = null; // Clean up
+    };
+  }, []);
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -235,19 +259,20 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
       setIsReading(false);
     } else {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US'; // Set language if needed
+      utterance.voice = selectedVoice; // Use selected voice
+      utterance.lang = selectedVoice ? selectedVoice.lang : 'en-IN'; // Set language based on selected voice
       speechSynthesis.speak(utterance);
       utteranceRef.current = utterance;
       setIsReading(true);
     }
   };
 
-  useEffect(() => {
-    // Clean up on component unmount or navigation
-    return () => {
+  const stopReading = () => {
+    if (isReading) {
       speechSynthesis.cancel();
-    };
-  }, []);
+      setIsReading(false);
+    }
+  };
 
   return (
     <div style={styles.pageContainer}>
@@ -257,14 +282,11 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
             <CustomCamera />
             <OrbitControls enableZoom={true} enableDamping dampingFactor={0.1} />
             <ambientLight intensity={2} />
-            <directionalLight position={[5, 10, 5]} intensity={lightingIntensity} castShadow />
-
-            {/* The plane now receives shadows */}
+            <directionalLight position={[5, 10, 5]} intensity={1} castShadow />
             <mesh position={planePosition} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
               <planeGeometry args={[100, 100]} />
-              <meshStandardMaterial color={planeColor} side={DoubleSide} />
+              <meshStandardMaterial color="#CCCCCC" side={DoubleSide} />
             </mesh>
-
             <Suspense fallback={null}>
               <FBXModel modelPath={modelPath} scale={scale} position={position} onModelClick={handleModelClick} />
             </Suspense>
@@ -287,7 +309,7 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
           ) : (
             <div style={styles.textContainer}>
               <h1 style={styles.heading1}>{plantData.plantname}</h1>
-              <h3 style={styles.heading3}>Scientific Name:{plantData.scientific_name}</h3>
+              <h3 style={styles.heading3}>Scientific Name: {plantData.scientific_name}</h3>
               <h4 style={styles.heading4}>Type: {plantData.type}</h4>
               <hr style={styles.descriptionLine} />
               <h4 style={styles.heading4}>General Info:</h4>
@@ -296,8 +318,8 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
               <h4 style={styles.heading4}>Details:</h4>
               <p style={styles.paragraph}>{plantData.descriptive_info}</p>
               <button
-                onClick={() => speakText(`${plantData.plantname}. ${plantData.general_info}. ${plantData.descriptive_info}`)}
-                style={{ ...styles.readAloudButton, ...(isReading ? styles.stopReadingButton : {}), ...buttonStyles }}
+                onClick={isReading ? stopReading : () => speakText(`${plantData.plantname}. ${plantData.general_info}. ${plantData.descriptive_info}`)}
+                style={isReading ? styles.stopReadingButton : styles.readAloudButton}
               >
                 {isReading ? 'Stop Reading' : 'Read Aloud'}
               </button>
