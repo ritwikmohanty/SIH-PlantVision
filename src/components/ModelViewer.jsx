@@ -1,9 +1,176 @@
 import React, { Suspense, useRef, useEffect, useState } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { MeshStandardMaterial, DoubleSide } from 'three';
+import { DoubleSide } from 'three';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+
+// Inline styles to add Google Font
+const styles = {
+  '@import': "url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap')",
+
+  pageContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    overflow: 'hidden',
+    marginTop: '80px',
+    fontFamily: "'Poppins', sans-serif", // Adding Google Font here
+  },
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 'calc(100vh - 80px)',
+    overflow: 'hidden',
+  },
+  modelContainer: {
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#808080',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  sliderContainer: {
+    position: 'absolute',
+    bottom: '10px',
+    left: '10px',
+    display: 'flex',
+    gap: '10px',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '10px',
+    borderRadius: '10px',
+  },
+  thumbnail: {
+    width: '80px',
+    height: '80px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+  },
+  displayContainer: {
+    flex: 1,
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#D5E0D9',
+    overflow: 'hidden',
+  },
+  textContainer: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    color: '#333',
+    backgroundColor: '#fff',
+    padding: '15px',
+    borderRadius: '10px',
+    boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+    marginBottom: '15px',
+    overflowY: 'auto',
+  },
+  heading1: {
+    fontSize: '2.5rem',
+    color: '#333',
+    fontWeight: '600',
+    color: '#2C3E50', // Darker blue for the main heading
+  },
+  heading3: {
+    fontSize: '1.7rem',
+    fontWeight: '500',
+    color: '#16A085', // Teal for scientific name
+  },
+  heading4: {
+    fontSize: '1.4rem',
+    fontWeight: '500',
+    color: '#000', // Changed from red to black for subheadings
+    marginBottom: '5px',
+  },
+  paragraph: {
+    fontSize: '1.1rem',
+    lineHeight: '1.6',
+    color: '#666',
+  },
+  descriptionLine: {
+    border: '0',
+    borderTop: '1px solid #ddd',
+    margin: '10px 0',
+    width: '100%',
+  },
+  readAloudButton: {
+    marginTop: '15px',
+    padding: '10px 20px',
+    fontSize: '1rem',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    backgroundColor: '#4CAF50',
+    color: '#fff',
+    transition: 'background-color 0.3s ease, transform 0.3s ease', // Add transition for smooth animation
+  },
+  stopReadingButton: {
+    marginTop: '15px',
+    padding: '10px 20px',
+    fontSize: '1rem',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    backgroundColor: '#000', // Changed from red to black for stop reading button
+    color: '#fff',
+    transition: 'background-color 0.3s ease, transform 0.3s ease',
+  },
+  socialMediaContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '15px',
+    padding: '10px',
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+  },
+  socialMediaIcon: {
+    fontSize: '1.5rem',
+    color: '#555',
+    textDecoration: 'none',
+  },
+  notesContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    padding: '15px',
+    borderRadius: '10px',
+    boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
+    marginBottom: '15px',
+  },
+  notesHeading: {
+    fontSize: '1.1rem',
+    color: '#555',
+    marginBottom: '10px',
+  },
+  notesInput: {
+    width: '100%',
+    height: '80px',
+    padding: '10px',
+    borderRadius: '5px',
+    border: '1px solid #ddd',
+    resize: 'vertical',
+    fontSize: '0.9rem',
+  },
+  selectedImage: {
+    maxWidth: '100%',
+    maxHeight: '100%',
+    objectFit: 'contain',
+    borderRadius: '10px',
+  },
+};
+
+// Add hover and active animations for the button
+const buttonStyles = {
+  ':hover': {
+    transform: 'scale(1.05)', // Scale up on hover
+  },
+  ':active': {
+    backgroundColor: '#388E3C', // Darken the background color on click
+  },
+};
 
 const FBXModel = ({ modelPath, scale, position, onModelClick }) => {
   const fbxRef = useRef();
@@ -14,14 +181,14 @@ const FBXModel = ({ modelPath, scale, position, onModelClick }) => {
       object.scale.set(scale, scale, scale);
       object.position.set(...position);
       object.castShadow = true;
-      object.receiveShadow=true;
+      object.receiveShadow = true;
 
       object.traverse((child) => {
         if (child.isMesh) {
           child.material.side = DoubleSide;
           child.castShadow = true; // Cast shadows
           child.receiveShadow = true; // Receive shadows
-          child.alphaTest=0.5;
+          child.alphaTest = 0.5;
         }
       });
 
@@ -86,22 +253,22 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
     <div style={styles.pageContainer}>
       <div style={styles.contentContainer}>
         <div style={styles.modelContainer}>
-        <Canvas shadows={true} style={{ backgroundColor: '#808080' }}>
-  <CustomCamera />
-  <OrbitControls enableZoom={true} enableDamping dampingFactor={0.1} />
-  <ambientLight intensity={2} />
-  <directionalLight position={[5, 10, 5]} intensity={lightingIntensity} castShadow />
-  
-  {/* The plane now receives shadows */}
-  <mesh position={planePosition} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-    <planeGeometry args={[100, 100]} />
-    <meshStandardMaterial color={planeColor} side={DoubleSide} />
-  </mesh>
-  
-  <Suspense fallback={null}>
-    <FBXModel modelPath={modelPath} scale={scale} position={position} onModelClick={handleModelClick} />
-  </Suspense>
-</Canvas>
+          <Canvas shadows={true} style={{ backgroundColor: '#808080' }}>
+            <CustomCamera />
+            <OrbitControls enableZoom={true} enableDamping dampingFactor={0.1} />
+            <ambientLight intensity={2} />
+            <directionalLight position={[5, 10, 5]} intensity={lightingIntensity} castShadow />
+
+            {/* The plane now receives shadows */}
+            <mesh position={planePosition} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+              <planeGeometry args={[100, 100]} />
+              <meshStandardMaterial color={planeColor} side={DoubleSide} />
+            </mesh>
+
+            <Suspense fallback={null}>
+              <FBXModel modelPath={modelPath} scale={scale} position={position} onModelClick={handleModelClick} />
+            </Suspense>
+          </Canvas>
           <div style={styles.sliderContainer}>
             {imageData.map((image, index) => (
               <img
@@ -120,15 +287,17 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
           ) : (
             <div style={styles.textContainer}>
               <h1 style={styles.heading1}>{plantData.plantname}</h1>
-              <h3 style={styles.heading3}><i>Scientific Name:</i> {plantData.scientific_name}</h3>
-              <h4 style={styles.heading4}><i>Type:</i> {plantData.type}</h4>
+              <h3 style={styles.heading3}>Scientific Name:{plantData.scientific_name}</h3>
+              <h4 style={styles.heading4}>Type: {plantData.type}</h4>
+              <hr style={styles.descriptionLine} />
               <h4 style={styles.heading4}>General Info:</h4>
               <p style={styles.paragraph}>{plantData.general_info}</p>
+              <hr style={styles.descriptionLine} />
               <h4 style={styles.heading4}>Details:</h4>
               <p style={styles.paragraph}>{plantData.descriptive_info}</p>
-              <button 
-                onClick={() => speakText(`${plantData.plantname}. ${plantData.general_info}. ${plantData.descriptive_info}`)} 
-                style={isReading ? styles.stopReadingButton : styles.readAloudButton}
+              <button
+                onClick={() => speakText(`${plantData.plantname}. ${plantData.general_info}. ${plantData.descriptive_info}`)}
+                style={{ ...styles.readAloudButton, ...(isReading ? styles.stopReadingButton : {}), ...buttonStyles }}
               >
                 {isReading ? 'Stop Reading' : 'Read Aloud'}
               </button>
@@ -156,147 +325,6 @@ const ModelViewer = ({ modelPath, planeColor, lightingIntensity, scale, position
       </div>
     </div>
   );
-};
-
-const styles = {
-  pageContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100vh',
-    overflow: 'hidden',
-    marginTop:'80px',
-  },
-  contentContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: 'calc(100vh - 80px)',
-    overflow: 'hidden',
-  },
-  modelContainer: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#808080',
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  sliderContainer: {
-    position: 'absolute',
-    bottom: '10px',
-    left: '10px',
-    display: 'flex',
-    gap: '10px',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '10px',
-    borderRadius: '10px',
-  },
-  thumbnail: {
-    width: '80px',
-    height: '80px',
-    cursor: 'pointer',
-    borderRadius: '5px',
-  },
-  displayContainer: {
-    flex: 1,
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#D5E0D9',
-    overflow: 'hidden',
-  },
-  textContainer: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    color: '#333',
-    backgroundColor: '#fff',
-    padding: '15px',
-    borderRadius: '10px',
-    boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
-    marginBottom: '15px',
-    overflowY: 'auto',
-  },
-  notesContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    padding: '15px',
-    borderRadius: '10px',
-    boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
-    marginBottom: '15px',
-  },
-  notesHeading: {
-    fontSize: '1.1rem',
-    color: '#555',
-    marginBottom: '10px',
-  },
-  notesInput: {
-    width: '100%',
-    height: '80px',
-    padding: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ddd',
-    resize: 'vertical',
-    fontSize: '0.9rem',
-  },
-  selectedImage: {
-    maxWidth: '100%',
-    maxHeight: '100%',
-    objectFit: 'contain',
-    borderRadius: '10px',
-  },
-  heading1: {
-    fontSize: '2.5rem',
-    color: '#333',
-  },
-  heading3: {
-    fontSize: '1.7rem',
-    color: '#555',
-  },
-  heading4: {
-    fontSize: '1.4rem',
-    color: '#555',
-    marginBottom: '5px',
-  },
-  paragraph: {
-    fontSize: '1.1rem',
-    lineHeight: '1.6',
-    color: '#666',
-  },
-  socialMediaContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '15px',
-    padding: '10px',
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-  },
-  socialMediaIcon: {
-    fontSize: '1.5rem',
-    color: '#555',
-    textDecoration: 'none',
-  },
-  readAloudButton: {
-    marginTop: '15px',
-    padding: '10px 20px',
-    fontSize: '1rem',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-  },
-  stopReadingButton: {
-    marginTop: '15px',
-    padding: '10px 20px',
-    fontSize: '1rem',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    backgroundColor: '#F44336', 
-    color: '#fff',
-  },
 };
 
 export default ModelViewer;
