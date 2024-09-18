@@ -33,7 +33,7 @@ const AloeVera = () => {
       <ModelViewer
         modelPath="/Alovera.fbx"
         planeColor="lightgray"
-        lightingIntensity={4}
+        lightingIntensity={6}
         scale={0.2}
         position={[0, 0.1, 0]}
         imageData={imageData}
