@@ -24,7 +24,7 @@ const Question = ({ questionData, onAnswerCorrect }) => {
     },
     questionCard: {
       backgroundColor: '#ffffff',
-      padding: '40px',
+      padding: '20px', // Adjusted padding
       borderRadius: '15px',
       display: 'flex',
       flexDirection: 'column',
@@ -32,11 +32,19 @@ const Question = ({ questionData, onAnswerCorrect }) => {
       boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
       width: '100%', // Ensure card takes full width
       maxWidth: '800px', // Optional: limit max width
+      height: '500px', // Fixed height to keep the card size consistent
+      overflow: 'auto', // Handle content overflow
     },
     questionText: {
-      fontSize: '28px', // Bigger question text
+      fontSize: '24px', // Adjusted font size for better fit
       marginBottom: '20px',
       fontWeight: 'bold',
+      textAlign: 'center',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      display: '-webkit-box',
+      WebkitLineClamp: '3', // Limit to 3 lines
+      WebkitBoxOrient: 'vertical',
     },
     optionButton: {
       padding: '15px 30px', // Bigger buttons
@@ -45,7 +53,7 @@ const Question = ({ questionData, onAnswerCorrect }) => {
       color: '#333', // Text color remains dark
       border: '2px solid #ccc', // Add a border for contrast
       borderRadius: '10px',
-      fontSize: '20px',
+      fontSize: '18px', // Adjusted font size for better fit
       cursor: 'pointer',
       textAlign: 'center',
       transition: 'background-color 0.3s ease',
@@ -59,15 +67,11 @@ const Question = ({ questionData, onAnswerCorrect }) => {
       color: '#fff', // White text for contrast
     },
     feedback: {
-      fontSize: '24px',
+      fontSize: '20px', // Adjusted font size for better fit
       fontWeight: 'bold',
       color: feedback === 'Correct!' ? '#4CAF50' : '#f44336', // Green or red feedback text
       marginTop: '20px',
-    },
-    userInputs: {
-      marginTop: '20px',
-      fontSize: '16px',
-      color: '#333',
+      textAlign: 'center',
     }
   };
 
@@ -93,16 +97,6 @@ const Question = ({ questionData, onAnswerCorrect }) => {
           </button>
         ))}
         {feedback && <div style={styles.feedback}>{feedback}</div>}
-        {userInputs.length > 0 && (
-          <div style={styles.userInputs}>
-            <p>You've selected:</p>
-            <ul>
-              {userInputs.map((input, index) => (
-                <li key={index}>{input}</li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );

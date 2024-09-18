@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import PlantInfo from './Plantinfo'; // Ensure this component only handles text
 import Question from './Question'; // Ensure this component only handles text
 
@@ -6,7 +7,9 @@ const quizData = [
   {
     plant: {
       name: 'Ashwagandha',
-      description: 'Ashwagandha is a powerful adaptogen used in Ayurveda to reduce stress and improve overall health.',
+      description: 'Ashwagandha is an ancient herb known for its adaptogenic properties, which help the body manage stress and enhance overall well-being. This powerful plant is widely used in Ayurveda to improve energy levels, support cognitive function, and balance mood. Often referred to as “Indian Ginseng,” Ashwagandha has been a cornerstone in traditional medicine for centuries due to its remarkable ability to promote vitality and resilience.',
+      summary: 'Enhances stamina and reduces anxiety, commonly called “Indian Ginseng.”',
+      image: '/ashwagandha.jpg', // Add the image path
     },
     questions: [
       {
@@ -38,7 +41,9 @@ const quizData = [
   {
     plant: {
       name: 'Tulsi',
-      description: 'Tulsi, or Holy Basil, is revered in Ayurveda for its adaptogenic and stress-relieving properties.',
+      description: 'Tulsi, also known as Holy Basil, is highly regarded in Ayurveda for its adaptogenic and stress-relieving properties. This sacred herb supports respiratory health, boosts immunity, and promotes mental clarity. Often referred to as the “Queen of Herbs,” Tulsi is celebrated for its ability to harmonize mind and body, making it an essential component of holistic wellness practices and daily health routines.',
+      summary: 'Balances mind and body, known as the “Queen of Herbs.”',
+      image: '/tulsi.jpg', // Add the image path
     },
     questions: [
       {
@@ -70,7 +75,9 @@ const quizData = [
   {
     plant: {
       name: 'Neem',
-      description: 'Neem is a highly valued plant in Ayurveda for its detoxifying and anti-inflammatory properties.',
+      description: 'Neem is a revered plant in Ayurvedic medicine, known for its potent detoxifying and anti-inflammatory properties. This versatile herb supports skin health, aids in detoxification, and combats various infections. Often referred to as the “Village Pharmacy,” Neem is used both topically and internally to maintain overall health and address a wide range of ailments, making it a cornerstone in natural medicine.',
+      summary: 'Supports skin health and detoxification, known as the “Village Pharmacy.”',
+      image: '/Neem.jpg', // Add the image path
     },
     questions: [
       {
@@ -102,7 +109,9 @@ const quizData = [
   {
     plant: {
       name: 'Amla',
-      description: 'Amla, or Indian Gooseberry, is known for its high vitamin C content and its role in enhancing immunity in Ayurveda.',
+      description: 'Amla, or Indian Gooseberry, is renowned for its exceptional vitamin C content and immune-boosting properties. This potent fruit enhances overall health, supports digestion, and promotes skin rejuvenation. In Ayurveda, Amla is used to strengthen the immune system, improve vitality, and maintain youthfulness. Its rich antioxidant profile makes it a powerful ally in promoting long-term wellness and resilience.',
+      summary: 'Rejuvenates the body and supports overall health, rich in antioxidants.',
+      image: '/amla.jpg', // Add the image path
     },
     questions: [
       {
@@ -141,6 +150,8 @@ const QuizApp = () => {
   const [quizFinished, setQuizFinished] = useState(false);
   const [questionPoints, setQuestionPoints] = useState(0);
 
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const currentPlant = quizData[currentPlantIndex];
 
   const handleStartQuiz = () => {
@@ -166,6 +177,10 @@ const QuizApp = () => {
     }, 1000);
   };
 
+  const handleViewModel = () => {
+    navigate(`/library/${currentPlant.plant.name.toLowerCase()}`); // Navigate to 3D view
+  };
+
   const styles = {
     container: {
       minHeight: '100vh', // Full height of the screen
@@ -176,12 +191,12 @@ const QuizApp = () => {
       backgroundColor: '#f0f7f1',
       padding: '20px',
       position: 'relative', // Added for relative positioning of points
-      marginTop: '80px', 
+      marginTop: '20px', 
     },
     header: {
       fontSize: '36px', // Larger title
       textAlign: 'center',
-      marginBottom: '30px',
+      marginTop:'60px'
     },
     points: {
       position: 'absolute', // Absolute positioning for right alignment
@@ -200,7 +215,7 @@ const QuizApp = () => {
       textAlign: 'center',
       fontSize: '20px',
       color: '#2196F3',
-      marginBottom: '20px',
+      marginBottom: '10px',
     },
   };
 
@@ -214,6 +229,7 @@ const QuizApp = () => {
           <PlantInfo
             plantData={currentPlant.plant}
             onStartQuiz={handleStartQuiz}
+            onViewModel={handleViewModel} // Pass the function as a prop
           />
         ) : (
           <>
