@@ -1,12 +1,13 @@
 import React from 'react';
 import { Leaf, Gamepad2, Axe, MessageSquare, Headphones, Languages } from 'lucide-react';
+import './About.css'; // Import the CSS file
 
 const FeatureCard = ({ icon: Icon, title, description }) => (
-  <div className="feature-card">
-    <Icon className="feature-icon" />
-    <h3>{title}</h3>
-    <p>{description}</p>
-    <button>Explore Now</button>
+  <div className="featureCard">
+    <Icon className="featureIcon" />
+    <h3 className="featureTitle">{title}</h3>
+    <p className="featureDescription">{description}</p>
+    <button className="button">Explore Now</button>
   </div>
 );
 
@@ -45,148 +46,25 @@ const About = () => {
   ];
 
   return (
-    <div className="virtual-herbal-garden">
+    <div className="virtualHerbalGarden">
       <div className="container">
         <div className="header">
-          <img src="herbal plants.png" alt="Herbal ingredients" />
-          <div className="header-content">
-            <h1>HEALING TRADITIONS OF AYUSH</h1>
-            <p>
+          <img src="herbal plants.png" alt="Herbal ingredients" className="headerImage" />
+          <div className="headerContent">
+            <h1 className="headerTitle">HEALING TRADITIONS OF AYUSH</h1>
+            <p className="paragraph">
               AYUSH stands for Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homeopathy—an ancient system of holistic healing rooted in India's rich heritage. These traditional healthcare practices focus on maintaining balance and harmony within the body and mind, using natural remedies derived from medicinal plants.
             </p>
           </div>
         </div>
-        
-        <h2>KEY FEATURES</h2>
-        <div className="features-grid">
+
+        <h2 className="keyFeaturesTitle">KEY FEATURES</h2>
+        <div className="featuresGrid">
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} />
           ))}
         </div>
       </div>
-
-      <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Janvi+Purva:wght@700&family=Baskervville:wght@400&family=Judson:wght@400&display=swap');
-
-        .virtual-herbal-garden {
-          background-color: rgb(213, 224, 217);
-          min-height: 100vh;
-          padding: 2rem;
-          font-family: 'Judson', serif;
-        }
-
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .header {
-          background-color: white;
-          border-radius: 8px;
-          overflow: hidden;
-          margin-bottom: 2rem;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .header img {
-          width: 100%;
-          max-height: 300px;
-          object-fit: cover;
-        }
-
-        .header-content {
-          padding: 1.5rem;
-        }
-
-        h1 {
-          font-family: 'Janvi Purva', serif;
-          font-size: 2rem;
-          margin-bottom: 1rem;
-          color: #333;
-        }
-
-        h2 {
-          font-family: 'Janvi Purva', serif;
-          font-size: 1.5rem;
-          margin-bottom: 1.5rem;
-          color: #333;
-        }
-
-        .features-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 1.5rem;
-        }
-
-        .feature-card {
-          background-color: white;
-          padding: 1.5rem;
-          border-radius: 8px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-icon {
-          width: 48px;
-          height: 48px;
-          color: #4CAF50;
-          margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-          font-family: 'Janvi Purva', serif;
-          font-size: 1.25rem;
-          margin-bottom: 0.5rem;
-          color: #333;
-        }
-
-        .feature-card p {
-          font-family: 'Baskervville', serif;
-          color: #666;
-          margin-bottom: 1rem;
-        }
-
-        .feature-card button {
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-        }
-
-        .feature-card button:hover {
-          background-color: #45a049;
-        }
-
-        @media (min-width: 768px) {
-          .header {
-            display: flex;
-          }
-
-          .header img {
-            width: 33.333%;
-          }
-
-          .header-content {
-            width: 66.666%;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .virtual-herbal-garden {
-            padding: 1rem;
-          }
-
-          h1 {
-            font-size: 1.5rem;
-          }
-
-          h2 {
-            font-size: 1.25rem;
-          }
-        }
-      `}</style>
     </div>
   );
 };

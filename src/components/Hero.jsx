@@ -55,7 +55,6 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    backgroundAttachment: 'fixed',
     marginTop: '80px',
     display: 'flex',
     justifyContent: 'center',

@@ -1,0 +1,104 @@
+/* About.css */
+@import url('https://fonts.googleapis.com/css2?family=Janvi+Purva:wght@400;700&family=Baskervville:wght@400;700&family=Judson:wght@400;700&display=swap');
+
+.virtualHerbalGarden {
+    background-color: rgb(213, 224, 217);
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: 'Judson', serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    margin-top: 6rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+}
+
+.headerImage {
+    width: 33.333%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 19px;
+}
+
+.headerContent {
+    width: 66.666%;
+    padding: 1.5rem;
+    font-size: 27px;
+}
+
+.headerTitle {
+    font-family: 'Janvi Purva', serif;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.paragraph {
+    font-family: 'Baskervville', serif;
+    color: #666;
+}
+
+.keyFeaturesTitle {
+    font-family: 'Janvi Purva', serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.featureCard {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+    width: 48px;
+    height: 48px;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.featureTitle {
+    font-family: 'Janvi Purva', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.featureDescription {
+    font-family: 'Baskervville', serif;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
