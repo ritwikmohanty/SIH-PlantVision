@@ -3,7 +3,7 @@ import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { DoubleSide } from 'three';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaArrowLeft, FaStickyNote, FaVolumeUp, FaArrowCircleLeft } from 'react-icons/fa';
 
 // Inline styles to add Google Font
 const styles = {
@@ -26,27 +26,12 @@ const styles = {
   modelContainer: {
     flex: 1,
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#808080',
     position: 'relative',
     overflow: 'hidden',
-  },
-  sliderContainer: {
-    position: 'absolute',
-    bottom: '10px',
-    left: '10px',
-    display: 'flex',
-    gap: '10px',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '10px',
-    borderRadius: '10px',
-  },
-  thumbnail: {
-    width: '80px',
-    height: '80px',
-    cursor: 'pointer',
-    borderRadius: '5px',
   },
   displayContainer: {
     flex: 1,
@@ -95,29 +80,17 @@ const styles = {
     margin: '10px 0',
     width: '100%',
   },
-  readAloudButton: {
-    marginTop: '15px',
-    padding: '10px 20px',
-    fontSize: '1rem',
-    border: 'none',
-    borderRadius: '5px',
+  readAloudIcon: {
+    fontSize: '2.5rem',
+    color: '#000',
     cursor: 'pointer',
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
-  },
-  stopReadingButton: {
-    marginTop: '15px',
-    padding: '10px 20px',
-    fontSize: '1rem',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    backgroundColor: '#000',
-    color: '#fff',
-    transition: 'background-color 0.3s ease, transform 0.3s ease',
+    transition: 'color 0.3s ease',
   },
   socialMediaContainer: {
+    position: 'absolute',
+    bottom: '10px',
+    left: '50%',
+    transform: 'translateX(-175%)', // Center it horizontally
     display: 'flex',
     justifyContent: 'center',
     gap: '15px',
@@ -126,47 +99,75 @@ const styles = {
     borderRadius: '10px',
   },
   socialMediaIcon: {
-    fontSize: '1.5rem',
+    fontSize: '2.5rem',
     color: '#555',
     textDecoration: 'none',
   },
-  notesContainer: {
+  notesButton: {
+    fontSize: '2.5rem',
+    color: '#FFDF6C',
+    cursor: 'pointer',
+  },
+  sliderContainer: {
+    position: 'relative',
     display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#fff',
-    padding: '15px',
-    borderRadius: '10px',
-    boxShadow: '0px 4px 10px rgba(0,0,0,0.1)',
-    marginBottom: '15px',
-  },
-  notesHeading: {
-    fontSize: '1.1rem',
-    color: '#555',
-    marginBottom: '10px',
-  },
-  notesInput: {
-    width: '100%',
-    height: '80px',
+    gap: '10px',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     padding: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ddd',
-    resize: 'vertical',
-    fontSize: '0.9rem',
+    borderRadius: '10px',
+    marginTop: '15px',
   },
-  selectedImage: {
+  thumbnail: {
+    width: '80px',
+    height: '80px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+    transition: 'transform 0.3s ease',
+  },
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+    backdropFilter: 'blur(10px)',
+  },
+  modalImageContainer: {
+    position: 'relative',
+    width: '80%',
+    height: '80%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+    padding: '20px',
+  },
+  modalImage: {
     maxWidth: '100%',
     maxHeight: '100%',
-    objectFit: 'contain',
     borderRadius: '10px',
   },
-};
-
-const buttonStyles = {
-  ':hover': {
-    transform: 'scale(1.05)',
+  closeButton: {
+    position: 'absolute',
+    top: '20px',
+    left: '20px',
+    fontSize: '2rem',
+    color: '#fff',
+    cursor: 'pointer',
   },
-  ':active': {
-    backgroundColor: '#388E3C',
+  backButton: {
+    position: 'absolute',
+    top: '20px',
+    right: '20px',
+    fontSize: '2rem',
+    color: '#fff',
+    cursor: 'pointer',
   },
 };
 
@@ -220,6 +221,7 @@ const ModelViewer = ({ modelPath, scale, position, planePosition, imageData, pla
   const [voices, setVoices] = useState([]);
   const [selectedVoice, setSelectedVoice] = useState(null);
   const utteranceRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch available voices
   useEffect(() => {
@@ -227,31 +229,21 @@ const ModelViewer = ({ modelPath, scale, position, planePosition, imageData, pla
       const availableVoices = speechSynthesis.getVoices();
       setVoices(availableVoices);
 
-      // Find the "en-IN-Standard-B" voice
-      const indianVoice = availableVoices.find(voice => voice.name === 'en-IN-Standard-B');
+      const indianVoice = availableVoices.find((voice) => voice.name === 'en-IN-Standard-B');
       if (indianVoice) {
         setSelectedVoice(indianVoice);
       } else if (availableVoices.length > 0) {
-        // Default to the first available voice if "en-IN-Standard-B" is not found
         setSelectedVoice(availableVoices[0]);
       }
     };
 
     updateVoices();
-    speechSynthesis.onvoiceschanged = updateVoices; // Update voices when they change
+    speechSynthesis.onvoiceschanged = updateVoices;
 
     return () => {
-      speechSynthesis.onvoiceschanged = null; // Clean up
+      speechSynthesis.onvoiceschanged = null;
     };
   }, []);
-
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-  };
-
-  const handleModelClick = () => {
-    setSelectedImage(null);
-  };
 
   const speakText = (text) => {
     if (isReading) {
@@ -274,6 +266,15 @@ const ModelViewer = ({ modelPath, scale, position, planePosition, imageData, pla
     }
   };
 
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div style={styles.pageContainer}>
       <div style={styles.contentContainer}>
@@ -288,62 +289,60 @@ const ModelViewer = ({ modelPath, scale, position, planePosition, imageData, pla
               <meshStandardMaterial color="#CCCCCC" side={DoubleSide} />
             </mesh>
             <Suspense fallback={null}>
-              <FBXModel modelPath={modelPath} scale={scale} position={position} onModelClick={handleModelClick} />
+              <FBXModel modelPath={modelPath} scale={scale} position={position} />
             </Suspense>
           </Canvas>
+        </div>
+
+        <div style={styles.displayContainer}>
+          <div style={styles.textContainer}>
+            <h1 style={styles.heading1}>{plantData.plantname}</h1>
+            <h3 style={styles.heading3}>Scientific Name: {plantData.scientific_name}</h3>
+            <h4 style={styles.heading4}>Type: {plantData.type}</h4>
+            <hr style={styles.descriptionLine} />
+            <h4 style={styles.heading4}>General Info:</h4>
+            <p style={styles.paragraph}>{plantData.general_info}</p>
+            <hr style={styles.descriptionLine} />
+            <h4 style={styles.heading4}>Details:</h4>
+            <p style={styles.paragraph}>{plantData.descriptive_info}</p>
+          </div>
+
           <div style={styles.sliderContainer}>
             {imageData.map((image, index) => (
               <img
                 key={index}
                 src={image}
-                alt={`Thumbnail ${index}`}
+                alt={`Thumbnail ${index + 1}`}
                 style={styles.thumbnail}
                 onClick={() => handleImageClick(image)}
               />
             ))}
           </div>
-        </div>
-        <div style={styles.displayContainer}>
-          {selectedImage ? (
-            <img src={selectedImage} alt="Selected" style={styles.selectedImage} />
-          ) : (
-            <div style={styles.textContainer}>
-              <h1 style={styles.heading1}>{plantData.plantname}</h1>
-              <h3 style={styles.heading3}>Scientific Name: {plantData.scientific_name}</h3>
-              <h4 style={styles.heading4}>Type: {plantData.type}</h4>
-              <hr style={styles.descriptionLine} />
-              <h4 style={styles.heading4}>General Info:</h4>
-              <p style={styles.paragraph}>{plantData.general_info}</p>
-              <hr style={styles.descriptionLine} />
-              <h4 style={styles.heading4}>Details:</h4>
-              <p style={styles.paragraph}>{plantData.descriptive_info}</p>
-              <button
-                onClick={isReading ? stopReading : () => speakText(`${plantData.plantname}. ${plantData.general_info}. ${plantData.descriptive_info}`)}
-                style={isReading ? styles.stopReadingButton : styles.readAloudButton}
-              >
-                {isReading ? 'Stop Reading' : 'Read Aloud'}
-              </button>
+
+          {isModalOpen && (
+            <div style={styles.modalOverlay}>
+              <div style={styles.modalImageContainer}>
+                <FaArrowCircleLeft style={styles.backButton} onClick={closeModal} />
+                <img src={selectedImage} alt="Selected" style={styles.modalImage} />
+                <FaArrowLeft style={styles.closeButton} onClick={closeModal} />
+              </div>
             </div>
           )}
-          <div style={styles.notesContainer}>
-            <h4 style={styles.notesHeading}>Notes:</h4>
-            <textarea style={styles.notesInput} />
-          </div>
-          <div style={styles.socialMediaContainer}>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={styles.socialMediaIcon}>
-              <FaFacebook />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={styles.socialMediaIcon}>
-              <FaTwitter />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={styles.socialMediaIcon}>
-              <FaInstagram />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={styles.socialMediaIcon}>
-              <FaLinkedin />
-            </a>
-          </div>
         </div>
+      </div>
+
+      <div style={styles.socialMediaContainer}>
+        <FaFacebook style={styles.socialMediaIcon} />
+        <FaTwitter style={styles.socialMediaIcon} />
+        <FaInstagram style={styles.socialMediaIcon} />
+        <FaLinkedin style={styles.socialMediaIcon} />
+        <FaStickyNote style={styles.notesButton} onClick={() => alert('Notes functionality coming soon!')} />
+        <FaVolumeUp
+  style={{ ...styles.readAloudIcon, color: isReading ? '#4CAF50' : '#000' }}
+  onClick={() => speakText(
+    `${plantData.plantname}. ${plantData.scientific_name}. ${plantData.type}. ${plantData.general_info}. ${plantData.descriptive_info}`
+  )}
+/>
       </div>
     </div>
   );

@@ -11,6 +11,8 @@ import GotiKola from './components/GotiKola';  // Import GotiKola
 import Neem from './components/Neem';  // Import Neem
 import LemonGrass from './components/Lemongrass';
 import PepperMint from './components/Peppermint';
+import About from './components/about';
+
 
 import Floraquest from './components/Floraquest'; // Import the Floraquest component
 
@@ -26,6 +28,7 @@ const App = () => {
             <div>
               <Header />
               <Hero />
+              <About/>
             </div>
           }
         />

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Herobg from '../assets/Herobg.png';
 
@@ -11,64 +11,75 @@ const Hero = () => {
   };
 
   return (
-    <section style={{ ...styles.heroSection, backgroundImage: `url(${Herobg})` }}>
-      <style>
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Jaini+Purva&display=swap');
-</style>
-  <h1 style={styles.heroTitle}>Discover The</h1> 
-  <br /> 
-  <h1 style={styles.heroTitle2}>Healing Power of Nature</h1>
-  <p style={styles.heroSubtitle}>
-    Explore the world of medicinal plants with an immersive, interactive experience.
-  </p>
-  <button
-        style={{ 
-          ...styles.heroButton,
-          ...(isHovered ? styles.heroButtonHover : {}) // Apply hover style dynamically
-        }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={handleClick}
-      >EXPLORE GARDEN</button>
-    </section>
-    
+    <div style={styles.heroWrapper}>
+      <section style={{ ...styles.heroSection, backgroundImage: `url(${Herobg})` }}>
+        <style>
+          {`
+            @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Jaini+Purva&display=swap');
+          `}
+        </style>
+        <div style={styles.heroContent}>
+          <h1 style={styles.heroTitle}>Discover The</h1>
+          <br />
+          <h1 style={styles.heroTitle2}>Healing Power of Nature</h1>
+          <p style={styles.heroSubtitle}>
+            Explore the world of medicinal plants with an immersive, interactive experience.
+          </p>
+          <button
+            style={{
+              ...styles.heroButton,
+              ...(isHovered ? styles.heroButtonHover : {}) // Apply hover style dynamically
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={handleClick}
+          >
+            EXPLORE GARDEN
+          </button>
+        </div>
+      </section>
+    </div>
   );
 };
 
 const styles = {
+  heroWrapper: {
+    position: 'relative',
+    minHeight: '100vh', // Ensure the wrapper takes up at least the viewport height
+    overflow: 'hidden',
+  },
   heroSection: {
-    textAlign: 'center',
-    padding: '5vw',
-    color: '#344e41',
+    position: 'relative', // Make sure it can extend beyond the viewport
+    minHeight: '100vh',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
-    minHeight: '100vh',
+    backgroundAttachment: 'fixed',
+    marginTop: '80px',
     display: 'flex',
-    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundAttachment: 'fixed',
-    marginTop:'80px',
-    '@media(max-width: 768px)': {
-      padding: '3vh 3vw',
-      backgroundSize: 'contain',
-    },
+  },
+  heroContent: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    textAlign: 'center',
+    width: '100%',
   },
   heroTitle: {
     fontFamily: 'Abril Fatface',
     fontSize: 'clamp(40px, 8vw, 90px)', // Adjusted for better scaling
     fontWeight: '400',
     lineHeight: '1.1em',
-    textAlign: 'center',
     background: 'linear-gradient(-90deg, #101B12 0%, #4C8055 100%)',
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     color: 'transparent',
-    paddingBottom: '13px', //for removing translucent merging on heading
+    paddingBottom: '13px', // for removing translucent merging on heading
     marginTop: '-5vh',
-    
     textShadow: '2px 4px 6px rgba(8, 8, 8, 0.5)',
   },
   heroTitle2: {
@@ -76,14 +87,12 @@ const styles = {
     fontSize: 'clamp(40px, 8vw, 90px)', // Adjusted for better scaling
     fontWeight: '400',
     lineHeight: '1.1em',
-    textAlign: 'center',
     background: 'linear-gradient(-90deg, #4C8055 0%, #101B12 100%)',
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     color: 'transparent',
-    paddingBottom: '13px', //for removing translucent merging on heading
+    paddingBottom: '13px', // for removing translucent merging on heading
     marginTop: '-5vh',
-    
     textShadow: '2px 4px 6px rgba(8, 8, 8, 0.5)',
   },
   heroSubtitle: {
@@ -94,10 +103,6 @@ const styles = {
     marginBottom: '4vh',
     color: '#000',
     padding: '0 5vw', // Adds padding for readability on mobile
-    '@media(max-width: 768px)': {
-      padding: '0 5vw',
-      
-    },
   },
   heroButton: {
     backgroundColor: '#437532',
@@ -110,16 +115,11 @@ const styles = {
     cursor: 'pointer',
     borderRadius: '10px',
     marginBottom: '30vh',
-    transition: 'transform 0.2s ease-in-out', 
-    '@media(max-width: 768px)': {
-      padding: '2vh 4vw',
-      marginBottom: '10vh',
-    }, 
+    transition: 'transform 0.2s ease-in-out',
   },
   heroButtonHover: {
-    transform: 'scale(1.1)',//hover function
+    transform: 'scale(1.1)', // Hover function
   },
 };
-
 
 export default Hero;
