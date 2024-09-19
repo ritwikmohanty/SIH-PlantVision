@@ -243,8 +243,8 @@ const Peppermint = () => {
 
         lightingIntensity={9}
         scale={0.2}
-        position={[0, -8, 0]}
-        planePosition={[0, -8, 0]}
+        position={[0, -5, 0]}
+        planePosition={[0, -5, 0]}
         imageData={imageData}
         plantData={plantData}
       />
