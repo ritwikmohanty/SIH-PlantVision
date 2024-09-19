@@ -158,7 +158,7 @@ const styles = {
     top: '20px',
     left: '20px',
     fontSize: '2rem',
-    color: '#fff',
+    color: 'black',
     cursor: 'pointer',
   },
   backButton: {
