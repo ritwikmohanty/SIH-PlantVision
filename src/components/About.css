@@ -1,15 +1,16 @@
 /* About.css */
-@import url('https://fonts.googleapis.com/css2?family=Janvi+Purva:wght@400;700&family=Baskervville:wght@400;700&family=Judson:wght@400;700&display=swap');
+
+
 
 .virtualHerbalGarden {
     background-color: rgb(213, 224, 217);
-    min-height: 100vh;
+    min-height: 220vh;
     padding: 2rem;
-    font-family: 'Judson', serif;
 }
 
 .container {
     max-width: 1200px;
+    height: 50px;
     margin: 0 auto;
 }
 
@@ -38,20 +39,22 @@
 }
 
 .headerTitle {
-    font-family: 'Janvi Purva', serif;
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-family: 'Jaini Purva', serif;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
     color: #333;
 }
 
 .paragraph {
     font-family: 'Baskervville', serif;
     color: #666;
+    font-size: 22px;
+    padding: 10px;
 }
 
 .keyFeaturesTitle {
-    font-family: 'Janvi Purva', serif;
-    font-size: 1.5rem;
+    font-family: 'Jaini Purva', serif;
+    font-size: 3rem;
     margin-bottom: 1.5rem;
     color: #333;
 }
@@ -60,6 +63,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
+    font-size: 18px;
 }
 
 .featureCard {
@@ -77,8 +81,8 @@
 }
 
 .featureTitle {
-    font-family: 'Janvi Purva', serif;
-    font-size: 1.25rem;
+    font-family: 'Jaini Purva', serif;
+    font-size: 2rem;
     margin-bottom: 0.5rem;
     color: #333;
 }

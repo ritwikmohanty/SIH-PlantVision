@@ -6,9 +6,9 @@ import { DoubleSide } from 'three';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaArrowLeft, FaStickyNote, FaVolumeUp, FaArrowCircleLeft } from 'react-icons/fa';
 
 // Inline styles to add Google Font
-const styles = {
-  '@import': "url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap')",
 
+
+const styles = {
   pageContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -54,6 +54,7 @@ const styles = {
     overflowY: 'auto',
   },
   heading1: {
+    fontFamily: '"Jaini Purva", sans-serif',
     fontSize: '2.5rem',
     color: '#2C3E50',
     fontWeight: '600',
@@ -276,7 +277,15 @@ const ModelViewer = ({ modelPath, scale, position, planePosition, imageData, pla
   };
 
   return (
+    
+    
     <div style={styles.pageContainer}>
+      <style>
+          {`
+            @import url('https://fonts.googleapis.com/css2?family=Jaini+Purva&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Jaini+Purva&display=swap');
+          `}
+        </style>
       <div style={styles.contentContainer}>
         <div style={styles.modelContainer}>
           <Canvas shadows={true} style={{ backgroundColor: '#808080' }}>

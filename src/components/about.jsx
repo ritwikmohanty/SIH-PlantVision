@@ -54,6 +54,8 @@ const About = () => {
             <h1 className="headerTitle">HEALING TRADITIONS OF AYUSH</h1>
             <p className="paragraph">
               AYUSH stands for Ayurveda, Yoga & Naturopathy, Unani, Siddha, and Homeopathy—an ancient system of holistic healing rooted in India's rich heritage. These traditional healthcare practices focus on maintaining balance and harmony within the body and mind, using natural remedies derived from medicinal plants.
+              <br/><br/>
+              In the Virtual Herbal Garden, you can explore the diverse range of herbs and plants that form the foundation of AYUSH treatments. From boosting immunity to promoting overall well-being, these natural treasures have been used for centuries to heal and restore health. Dive in and learn how nature holds the power to nurture and heal through the wisdom of AYUSH.
             </p>
           </div>
         </div>
