@@ -314,6 +314,7 @@ export default function Gardenia() {
         <PointerLockControls />
       </Canvas>
       <button style={buttonStyle} onClick={handleBackToHome}>Back to Home</button>
+      <audio src="/Sunfrost.mp3" autoPlay loop />
     </div>
   );
 }
