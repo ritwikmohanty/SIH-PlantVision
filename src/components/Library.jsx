@@ -367,6 +367,16 @@ const Library = () => {
       border: 'none',
       borderRadius: '5px',
       cursor: 'pointer',
+      // Custom arrow styling
+      WebkitAppearance: 'none', 
+      MozAppearance: 'none', 
+      appearance: 'none', 
+      background: '#1A442A', 
+      paddingRight: '30px', 
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg fill="%23FFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>')`, // Custom arrow
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'right 10px center', 
+      backgroundSize: '22px 22px', 
     },
   };
 

@@ -280,14 +280,17 @@ function Garden() {
 // Main FPS component
 export default function Gardenia() {
   const navigate = useNavigate();  // Initialize navigate function for routing
-
+  const audioRef = useRef(null);
   const handleBackToHome = () => {
     navigate('/');  // Navigate to the home page
   };
-
   // Define the spawn position
   const spawnPosition = [5, 10, -3];  // Change these values to your desired spawn coordinates
-
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.2; // Set volume to 20%
+    }
+  }, []);
   return (
     <div>
       <Canvas style={canvasStyle} shadows camera={{ fov: 75, near: 0.1, far: 1000 }}>
@@ -314,7 +317,7 @@ export default function Gardenia() {
         <PointerLockControls />
       </Canvas>
       <button style={buttonStyle} onClick={handleBackToHome}>Back to Home</button>
-      <audio src="/Sunfrost.mp3" autoPlay loop />
+      <audio ref={audioRef} src="/Sunfrost.mp3" autoPlay loop />
     </div>
   );
 }
